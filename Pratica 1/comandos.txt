@@ -1,0 +1,9 @@
+consult('nome_do_arquivo.pl'). //carrega arquivo e verifica sintaxe
+reconsult('nome_do_arquivo.pl'). //carrega apenas modificacoes no banco de dados e verifica sintaxe
+listing. //verifica memoria 
+trace. //abre o executador de passo a passo (debug)
+nodebug. //sai do executador de passo a passo (debug)
+halt. // sai do prolog
+read(X). //le a entrada do teclado
+write(X). //escreve na tela
+na operacao :- ',' é 'e' e ';' é 'ou' 
