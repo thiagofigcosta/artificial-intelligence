@@ -13,10 +13,13 @@ class Subject(object):
 			else:
 				self.inputs=[rd.uniform(minvalue,maxvalue) for i in range(numberOfInputs)]
 			self.output=0
+			self.fitness=0
 			self.rouletteval=0
+		def __lt__(self, other):
+			return self.fitness<other.fitness
 
 class Genetic(object):
-	def __init__(self,function=lambda x: 0, numberOfInputs=2,populationSize=100,minvalue=-100,maxvalue=100,isFloat=True,mutationRate=0.1,fertilityRate=0.7,minimization=False,minOutputValue=0):
+	def __init__(self,function=lambda x: 0, numberOfInputs=2,populationSize=100,minvalue=-100,maxvalue=100,isFloat=True,mutationRate=0.1,fertilityRate=0.7,minimization=False,minOutputValue=0,relativeRank=True):
 		if(populationSize%2!=0):
 			populationSize=populationSize+1
 		self.mutationRate=mutationRate
@@ -26,6 +29,7 @@ class Genetic(object):
 		self.module=1
 		self.minval=minvalue
 		self.maxval=maxvalue
+		self.relativeRank=relativeRank
 		if(minimization==True):
 			self.module=-1
 		self.min=[]
@@ -36,6 +40,22 @@ class Genetic(object):
 	def evaluate(self):
 		for i in range(len(self.population)):
 			self.population[i].output=self.function(self.population[i].inputs)
+			self.population[i].fitness=self.population[i].output*self.module+self.offset
+		if(self.relativeRank==True):
+			maxi=False
+			if(self.module==1):
+				maxi=True
+			self.population.sort(reverse=maxi)
+			a=self.population[0].fitness
+			b=self.population[len(self.population)-1].fitness
+			if(self.module==1):
+				c=a
+				a=b
+				b=c
+			for i in range(len(self.population)):
+				print(self.population[i].fitness)
+				self.population[i].fitness=a+(((b-a)*(i))/(len(self.population)-1))
+				print(self.population[i].fitness)
 
 	def mutate(self):
 		def genrand():
@@ -74,40 +94,45 @@ class Genetic(object):
 		return father.inputs,mother.inputs
 
 	def initroulette(self):
-		self.population[0].rouletteval=self.population[0].output*self.module+self.offset
+		self.population[0].rouletteval=self.population[0].fitness
 		for i in range(len(self.population)-1):
-			self.population[i+1].rouletteval=self.population[i].rouletteval+self.population[i+1].output*self.module+self.offset
+			self.population[i+1].rouletteval=self.population[i].rouletteval+self.population[i+1].fitness
 			if(self.population[i+1].rouletteval<self.population[i].rouletteval):
 				self.offset=self.offset*1.1+1000
+				self.evaluate()	
 				self.initroulette()	
 
-	def getroulletsubject(self):		
-		sortednumber=rd.uniform(self.offset,self.population[len(self.population)-1].rouletteval) 
+	def getroulletsubject(self):	
+		if(self.relativeRank==True):	
+			sortednumber=rd.uniform(0,self.population[len(self.population)-1].rouletteval) 
+		else:
+			sortednumber=rd.uniform(self.offset,self.population[len(self.population)-1].rouletteval) 
 		for i in range(len(self.population)):
 			if(sortednumber<=self.population[i].rouletteval):
-				# print ('GOTTTT: ',i),
-				return copy.copy(self.population[i])
+				print ('GOTTTT: ',i),
+				return copy.deepcopy(self.population[i])
 
 	def nxtgen(self):
+		# for i in range(len(self.population)):
+		# 	print (i,': ',self.population[i].output,'-',self.population[i].fitness,'___',self.population[i].rouletteval)
+		# print ('+++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+
 		self.initroulette()
 
 
-		# for i in range(len(self.population)):
-		# 	print (i,': ',self.population[i].output,'-',self.population[i].output*self.module+self.offset,'___',self.population[i].rouletteval)
-		# print ('.    ..    ..    ..    ..    ..    ..    ..    ..    .')
+		for i in range(len(self.population)):
+			print (i,': ','x:',self.population[i].inputs[0],'y:',self.population[i].inputs[1],'output: ',self.population[i].output,' fitness:',self.population[i].fitness,' roleta:',self.population[i].rouletteval)
+		print ('.    ..    ..    ..    ..    ..    ..    ..    ..    .')
 		
-
+		newpopulation=copy.deepcopy(self.population)
 		for i in range(len(self.population)//2):
-			self.population[i*2].inputs,self.population[i*2+1].inputs=self.sex(self.getroulletsubject(),self.getroulletsubject())
-			# print()
-			self.population[i*2].output,self.population[i*2+1].output=None,None
-
-
-
-		# self.evaluate()
-		# for i in range(len(self.population)):
-		# 	print (i,': ',self.population[i].output,'-',self.population[i].output*self.module+self.offset,'___',self.population[i].rouletteval)
-		# print ('------------------------------------------------------')
+			newpopulation[i*2].inputs,newpopulation[i*2+1].inputs=self.sex(self.getroulletsubject(),self.getroulletsubject())
+			print()
+		self.population=newpopulation
+		self.evaluate()
+		for i in range(len(self.population)):
+			print (i,': ','x:',self.population[i].inputs[0],'y:',self.population[i].inputs[1],'output: ',self.population[i].output,' fitness:',self.population[i].fitness,' roleta:',self.population[i].rouletteval)
+		print ('------------------------------------------------------')
 
 	def rank(self):
 		i=float("inf")
@@ -158,7 +183,7 @@ class Genetic(object):
 		self.evaluate()
 		for i in range(maxgens):
 			self.nxtgen()
-			# self.mutate()
+			#self.mutate()
 			self.evaluate()
 			self.rank()
 

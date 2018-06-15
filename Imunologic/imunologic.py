@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 #avaliar
 #[LOOP - definir previamente numero de geracao]
 #fazer x=5 clones para cada anticorpo
-#mutacao, mutar inversamente proporcional a aptidao (usar taxa de mutacao exponencial ao invez dos 10% fixo)
+#mutacao, mutar inversamente proporcional a aptidao (usar taxa de mutacao exponencial ao invez dos 10% fixo) e^(-d/dmax)  -dmax=melhor de tods
 #avaliar
 #pegar o melhor de cada grupo (multimodal, para monomodal clonar mais vezes os melhores, e pegar os 90% melhores de todos e introduzir 10% aleatorio)
 
