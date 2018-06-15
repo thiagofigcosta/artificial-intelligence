@@ -109,30 +109,15 @@ class Genetic(object):
 			sortednumber=rd.uniform(self.offset,self.population[len(self.population)-1].rouletteval) 
 		for i in range(len(self.population)):
 			if(sortednumber<=self.population[i].rouletteval):
-				#print ('GOTTTT: ',i),
 				return copy.deepcopy(self.population[i])
 
 	def nxtgen(self):
-		# for i in range(len(self.population)):
-		# 	print (i,': ',self.population[i].output,'-',self.population[i].fitness,'___',self.population[i].rouletteval)
-		# print ('+++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-
 		self.initroulette()
-
-
-		# for i in range(len(self.population)):
-		# 	print (i,': ','x:',self.population[i].inputs[0],'y:',self.population[i].inputs[1],'output: ',self.population[i].output,' fitness:',self.population[i].fitness,' roleta:',self.population[i].rouletteval)
-		# print ('.    ..    ..    ..    ..    ..    ..    ..    ..    .')
-		
 		newpopulation=copy.deepcopy(self.population)
 		for i in range(len(self.population)//2):
 			newpopulation[i*2].inputs,newpopulation[i*2+1].inputs=self.sex(self.getroulletsubject(),self.getroulletsubject())
-			#print()
 		self.population=newpopulation
 		self.evaluate()
-		# for i in range(len(self.population)):
-		# 	print (i,': ','x:',self.population[i].inputs[0],'y:',self.population[i].inputs[1],'output: ',self.population[i].output,' fitness:',self.population[i].fitness,' roleta:',self.population[i].rouletteval)
-		# print ('------------------------------------------------------')
 
 	def rank(self):
 		i=float("inf")
