@@ -164,7 +164,7 @@ class Genetic(object):
 			print('Worst Subject x*=y', inI,'=',i)
 			
 
-	def showFinalPop(self):
+	def showPopulation(self):
 		print ('Populacao final (x* = y):')
 		for i in range(len(self.population)):
 			print(self.population[i].inputs,'=',self.population[i].output)
