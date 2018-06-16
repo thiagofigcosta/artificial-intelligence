@@ -61,7 +61,7 @@ class Imunologic(object):
 				for j in range(self.mmclones):
 					self.population.insert(i*self.mmclones+1+i,copy.deepcopy(self.population[i*self.mmclones+i]))
 			else:
-				for j in range(self.smclones/(i+1)):
+				for j in range(int(self.smclones/(i+1))):
 					self.population.append(copy.deepcopy(self.population[i]))
 
 	def rangesort(self,lst,start,end,rev=False):
