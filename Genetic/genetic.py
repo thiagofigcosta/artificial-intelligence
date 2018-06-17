@@ -6,7 +6,9 @@ import pandas as pd
 import random as rd
 import matplotlib.pyplot as plt
 
-class Subject(object):
+
+class Genetic(object):
+	class Subject(object):
 		def __init__(self,numberOfInputs,minvalue,maxvalue,isFloat):
 			if(isFloat==False):
 				self.inputs=rd.sample(range(minvalue, maxvalue), numberOfInputs)
@@ -18,7 +20,6 @@ class Subject(object):
 		def __lt__(self, other):
 			return self.fitness<other.fitness
 
-class Genetic(object):
 	def __init__(self,function=lambda x: 0, numberOfInputs=2,populationSize=100,minvalue=-100,maxvalue=100,isFloat=True,mutationRate=0.1,fertilityRate=0.7,minimization=False,minOutputValue=0,relativeRank=True):
 		if(populationSize%2!=0):
 			populationSize=populationSize+1
@@ -35,7 +36,7 @@ class Genetic(object):
 		self.min=[]
 		self.med=[]
 		self.max=[]
-		self.population = [ Subject(numberOfInputs,minvalue,maxvalue,isFloat) for i in range(populationSize) ]
+		self.population = [ self.Subject(numberOfInputs,minvalue,maxvalue,isFloat) for i in range(populationSize) ]
 
 	def evaluate(self):
 		for i in range(len(self.population)):

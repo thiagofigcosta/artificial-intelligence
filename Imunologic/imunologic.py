@@ -7,16 +7,8 @@ import pandas as pd
 import random as rd
 import matplotlib.pyplot as plt
 
-#OK #criar vetor de pares/obj tamanho X(preenchido aleatoriamente de acordo com um intervalo) 
-
-#avaliar
-#[LOOP - definir previamente numero de geracao]
-#fazer x=5 clones para cada anticorpo
-#mutacao, mutar inversamente proporcional a aptidao (usar taxa de mutacao exponencial ao invez dos 10% fixo) e^(-d/dmax)  -dmax=melhor de tods
-#avaliar
-#pegar o melhor de cada grupo (multimodal, para monomodal clonar mais vezes os melhores, e pegar os 90% melhores de todos e introduzir 10% aleatorio)
-
-class Subject(object):
+class Imunologic(object):
+	class Subject(object):
 		def __init__(self,numberOfInputs,minvalue,maxvalue,isFloat):
 			if(isFloat==False):
 				self.inputs=rd.sample(range(minvalue, maxvalue), numberOfInputs)
@@ -27,7 +19,6 @@ class Subject(object):
 		def __lt__(self, other):
 			return self.output<other.output
 
-class Imunologic(object):
 	def __init__(self,function=lambda x: 0, numberOfInputs=2,populationSize=100,minvalue=-100,maxvalue=100,isFloat=True,mmclones=5,smclones=50,minimization=True,minOutputValue=0,multimodal=True):
 		self.function=function
 		self.minval=minvalue
@@ -46,7 +37,7 @@ class Imunologic(object):
 		self.min=[]
 		self.med=[]
 		self.max=[]
-		self.population = [ Subject(numberOfInputs,minvalue,maxvalue,isFloat) for i in range(populationSize) ]
+		self.population = [ self.Subject(numberOfInputs,minvalue,maxvalue,isFloat) for i in range(populationSize) ]
 
 	def evaluate(self):
 		for i in range(len(self.population)):
@@ -108,7 +99,7 @@ class Imunologic(object):
 			self.population=self.population[0:self.initialsize]
 		else:
 			self.population.sort(reverse=not self.minimization)
-			self.population=self.population[0:int(self.initialsize*0.9)]+[ Subject(self.numberOfInputs,self.minval,self.maxval,self.isFloat) for i in range(int(self.initialsize*0.1)) ]
+			self.population=self.population[0:int(self.initialsize*0.9)]+[ self.Subject(self.numberOfInputs,self.minval,self.maxval,self.isFloat) for i in range(int(self.initialsize*0.1)) ]
 
 
 	def rank(self):
