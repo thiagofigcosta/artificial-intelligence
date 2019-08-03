@@ -26,13 +26,13 @@ class Genetic(object):
 		self.mutationRate=mutationRate
 		self.fertilityRate=fertilityRate
 		self.function=function
-		self.offset=abs(minOutputValue)
 		self.module=1
-		self.minval=minvalue
-		self.maxval=maxvalue
 		self.relativeRank=relativeRank
 		if(minimization==True):
 			self.module=-1
+		self.minval=minvalue
+		self.maxval=maxvalue
+		self.offset=abs(minOutputValue)
 		self.min=[]
 		self.med=[]
 		self.max=[]
@@ -43,10 +43,7 @@ class Genetic(object):
 			self.population[i].output=self.function(self.population[i].inputs)
 			self.population[i].fitness=self.population[i].output*self.module+self.offset
 		if(self.relativeRank==True):
-			maxi=False
-			if(self.module==1):
-				maxi=True
-			self.population.sort(reverse=maxi)
+			self.population.sort(reverse=False)
 			a=self.population[0].fitness
 			b=self.population[len(self.population)-1].fitness
 			if(self.module==1):
