@@ -84,18 +84,24 @@ def normalEquation(path):
     data=readFromFile(path)
     if path == "data2.txt":
         normalize(data)
-    X=np.array(data[0][:-1])
+    Xarr=[1]  
+    Xarr.extend(data[0][:-1])
+    X=np.array(Xarr)
     Y=np.array(data[0][-1:])
     for el in data[1:]:
-        X = np.vstack([X, el[:-1]])
+        Xarr=[1]  
+        Xarr.extend(el[:-1])
+        X = np.vstack([X, Xarr])
         Y = np.vstack([Y, el[-1:]])
     Xt=X.transpose()
     XtXminus1=np.linalg.inv(Xt.dot(X))
     teta=XtXminus1.dot(Xt).dot(Y)
-    print(teta)
 
     A=list(*zip(*teta.tolist()))
-    b=0
+    b=A[0]
+    A=A[1:]
+    print("A",A)
+    print("b",b)
     quadraticError=0
     for el in data:
         expected = el[len(data[0])-1]

@@ -32,4 +32,4 @@ Para data2.txt:
 python3 linearRegression.py --normal2
 ```
 
-Para o data2 o erro quadratico é menor usando o método da equação normal caso o se executem poucas iterações ou se use uma taxa alta de aprendizado, entretantanto ao se usar uma taxa baixa com muitas iterações o erro é menor para a regreção linear pois neste caso é feito um ajuste fino e mesmo a equação normal calculando os valores exatos ela usa o coeficiente linear como 0 o que não é o ideal para todos os cenários.
+O erro quadratico é menor usando o método da equação normal do que usando métodos iterativos, pois a equação normal calcula a resposta otima.
